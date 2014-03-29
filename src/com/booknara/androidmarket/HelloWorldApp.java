@@ -23,9 +23,16 @@ public class HelloWorldApp {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		if(args.length < 2) {
+			System.out.println("Usage :\n" + "market email password query");
+			return;
+		}
+	
+
+		String email = args[0];
+		String password = args[1];
+		
 		MarketSession session = new MarketSession();
-		String email = "";
-		String password = "";
 //		String androidId = "f127896ab51d63ba";	// Nexus 4
 		String androidId = "3fdb9f8a04f6f2be";	// 
 		

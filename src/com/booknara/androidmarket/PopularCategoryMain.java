@@ -17,7 +17,8 @@ import com.gc.android.market.api.model.Market.AppsRequest.ViewType;
 import com.gc.android.market.api.model.Market.AppsResponse;
 import com.gc.android.market.api.model.Market.ResponseContext;
 
-public class HelloWorldApp {
+
+public class PopularCategoryMain {
 
 	/**
 	 * @param args
@@ -27,7 +28,6 @@ public class HelloWorldApp {
 			System.out.println("Usage :\n" + "market email password query");
 			return;
 		}
-	
 
 		String email = args[0];
 		String password = args[1];
@@ -38,18 +38,9 @@ public class HelloWorldApp {
 		
 		session.login(email,password);
 		session.getContext().setAndroidId(androidId);
-//		session.setLocale(Locale.KOREAN);
-//		System.out.println("Locale : " + Locale.getDefault());
-		
-//		String query = "maps";
-//		String query = "devoma.gmailmagictricks";
-//		String packageName = "com.google.android.apps.maps";
-//		String query = "pname:" + packageName;
-//		AppsRequest appsRequest = AppsRequest.newBuilder()
-//		                                .setQuery(query)
-//		                                .setStartIndex(0).setEntriesCount(10)
-//		                                .setWithExtendedInfo(true)
-//		                                .build();
+		session.setLocale(Locale.getDefault());
+		// http://en.wikipedia.org/wiki/Mobile_Network_Code
+//		session.setOperator("olleh", "45011");
 		
 		// OrderType : NONE, POPULAR, NEWEST, FEATURED
 		// Category Id : 

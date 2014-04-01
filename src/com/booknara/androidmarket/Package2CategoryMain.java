@@ -1,6 +1,14 @@
 package com.booknara.androidmarket;
 
-import java.util.Locale;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import org.apache.commons.io.IOUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 import com.gc.android.market.api.MarketSession;
 import com.gc.android.market.api.MarketSession.Callback;
@@ -12,13 +20,14 @@ import com.gc.android.market.api.model.Market.ResponseContext;
 
 
 public class Package2CategoryMain {
+	static final String baseUrl = "https://play.google.com/store/apps/details?id=";
 
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
-		if(args.length < 2) {
-			System.out.println("Usage :\n" + "market email password query");
+	public static void main(String[] args) throws Exception {
+		if(args.length < 3) {
+			System.out.println("Usage :\n" + "market email password android_id query");
 			return;
 		}
 
@@ -26,32 +35,16 @@ public class Package2CategoryMain {
 		String password = args[1];
 		
 		MarketSession session = new MarketSession();
-//		String androidId = "f127896ab51d63ba";	// Nexus 4 Secure,ANDROID_ID
-//		String androidId = "356489053681974";	// Nexus 4 TelephonyManager.getDeviceId()
-		String androidId = "3fdb9f8a04f6f2be";	// 
+		String androidId = args[2]; 
 		
 		session.login(email,password);
 		session.getContext().setAndroidId(androidId);
 		
-		session.setOperator("KT", "45008");
-//		session.setOperator("T-Mobile", "310260");
-//		session.setOperator("Dontelecom", "25010");
-		
-//		session.setLocale(Locale.CHINA);
-//		session.setLocale(Locale.KOREAN);
-//		System.out.println(Locale.KOREA.toString());
-		
 		// Query for extracting category information from package name(Package Name - Category) 
-//		final String packageName = "com.google.android.apps.maps";
-//		final String packageName = "com.imbc.mini";
-//		final String packageName = "com.facebook.katana";
-		
-		final String packageName = "com.iloen.melon";		// Only Korea
-//		final String packageName = "com.jiran.skt.self";	// Only Korea
-//		final String packageName = "com.skt.prod.zeropc.mobile";	// Only Korea
-//		final String packageName = "com.zeropc.tablet";
+		final String packageName = "com.facebook.katana";
+		// final String packageName = "com.iloen.melon";				// Only Korea
+
 		String query = "pname:" + packageName;
-//		String query = "melon";
 		AppsRequest appsRequest = AppsRequest.newBuilder()
 		                                .setQuery(query)
 		                                .setStartIndex(0).setEntriesCount(10)
@@ -66,20 +59,43 @@ public class Package2CategoryMain {
             		return;
             	}
             	
-            	for (App app : response.getAppList()) {
-            		if (app == null) {
-            			System.out.println("app object is null");
-            			continue;
-            		}
+            	// No app info
+            	if (response.getAppList().size() == 0) {
+                	String fullUrl = baseUrl + packageName;
+
+                    URL url;
+					try {
+						url = new URL(fullUrl);
+	                    InputStream input = url.openStream();
+	                    
+	                    Document doc = Jsoup.parse(getStringFromInputStream(input));
+	                    
+	                    // document-subtitle category
+	                    Element categoryElement = doc.select("a.category").first();
+	                    String category = categoryElement.select("span[itemprop=genre]").text();
+	                    System.out.println("Package Name : " + packageName + " - " + "Category : " + category);
+
+					} catch (MalformedURLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
             		
-            		System.out.print(app.toString());
-            		if (app.hasExtendedInfo()) {
-            			ExtendedInfo info = app.getExtendedInfo();
-//            			System.out.print(info.toString());
-//            			System.out.println("Title : " + app.getTitle() + " - " + "Category : " + info.getCategory() + " - " + "Package Name : " + info.getPackageName());
-//            			System.out.println("Package Name : " + packageName + " - " + "Category : " + info.getCategory());
-            		}
+            	} else {
+                	for (App app : response.getAppList()) {
+                		if (app == null) {
+                			System.out.println("app object is null");
+                			continue;
+                		}
+                		
+                		if (app.hasExtendedInfo()) {
+                			ExtendedInfo info = app.getExtendedInfo();
+                			System.out.println("Package Name : " + packageName + " - " + "Category : " + info.getCategory());
+                		}
+                	}            		
             	}
+
             }
         };
 		
@@ -88,4 +104,11 @@ public class Package2CategoryMain {
 		
 		System.out.println("End of info");
 	}
+	
+ 	private static String getStringFromInputStream(InputStream is) throws IOException {
+        String encoding = "UTF-8";
+        String output = IOUtils.toString(is, encoding);
+        
+        return output;
+ 	}
 }

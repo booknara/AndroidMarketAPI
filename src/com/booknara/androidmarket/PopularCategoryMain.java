@@ -24,8 +24,8 @@ public class PopularCategoryMain {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		if(args.length < 2) {
-			System.out.println("Usage :\n" + "market email password query");
+		if(args.length < 3) {
+			System.out.println("Usage :\n" + "market email password android_id query");
 			return;
 		}
 
@@ -33,31 +33,37 @@ public class PopularCategoryMain {
 		String password = args[1];
 		
 		MarketSession session = new MarketSession();
-//		String androidId = "f127896ab51d63ba";	// Nexus 4
-		String androidId = "3fdb9f8a04f6f2be";	// 
+		String androidId = args[2]; 
 		
 		session.login(email,password);
 		session.getContext().setAndroidId(androidId);
 		session.setLocale(Locale.getDefault());
-		// http://en.wikipedia.org/wiki/Mobile_Network_Code
-//		session.setOperator("olleh", "45011");
 		
-		// OrderType : NONE, POPULAR, NEWEST, FEATURED
-		// Category Id : 
-		// APPLICATION(AppType.APPLICATION) : TRAVEL, BOOKS_AND_REFERENCE, BUSINESS, COMICS, COMMUNICATION, EDUCATION, ENTERTAINMENT, FINANCE, HEALTH_AND_FITNESS, LIFESTYLE, APP_WALLPAPER
-		// MEDIA_AND_VIDEO, MEDICAL, MUSIC_AND_AUDIO, NEWS_AND_MAGAZINES, PERSONALIZATION, PHOTOGRAPHY, PRODUCTIVITY, SHOPPING, SOCIAL, SPORTS, TRANSPORTATION
-		// TRAVEL_AND_LOCAL, TOOLS, WEATHER, APP_WIDGETS, LIBRARIES_AND_DEMO
-
-		// GAME(AppType.GAME) : ARCADE, BRAIN, CARDS, CASUAL, GAME_WALLPAPER, SPORTS_GAMES, GAME_WIDGETS
+		// http://en.wikipedia.org/wiki/Mobile_Network_Code
+		 session.setOperator("olleh", "45011");
+		
+		// Order Type : NONE, POPULAR, NEWEST, FEATURED
+		// View Type : ALL, PAID, FREE
+		/* Category Id : 
+		 * APPLICATION(AppType.APPLICATION) : TRAVEL, BOOKS_AND_REFERENCE, BUSINESS, COMICS, COMMUNICATION, EDUCATION, ENTERTAINMENT, FINANCE, HEALTH_AND_FITNESS, LIFESTYLE, APP_WALLPAPER
+		 * MEDIA_AND_VIDEO, MEDICAL, MUSIC_AND_AUDIO, NEWS_AND_MAGAZINES, PERSONALIZATION, PHOTOGRAPHY, PRODUCTIVITY, SHOPPING, SOCIAL, SPORTS, TRANSPORTATION
+		 * TRAVEL_AND_LOCAL, TOOLS, WEATHER, APP_WIDGETS, LIBRARIES_AND_DEMO
+		 * GAME(AppType.GAME) : ARCADE, BRAIN, CARDS, CASUAL, GAME_WALLPAPER, SPORTS_GAMES, GAME_WIDGETS
+		 */
+		
+		OrderType orderType = OrderType.POPULAR;
+		AppType appType = AppType.GAME;
+		ViewType viewType = ViewType.ALL;
+		String categoryId = "ARCADE";
 		
 		final Map<App, String> appinfo = new HashMap<App, String>();
 		for (int i = 0; i < 20; i++) {
 			int startIndex = i * 10;
 			AppsRequest appsRequest = AppsRequest.newBuilder()
-					.setOrderType(OrderType.POPULAR)
-					.setAppType(AppType.GAME)
-					.setCategoryId("ARCADE")
-					.setViewType(ViewType.ALL)
+					.setOrderType(orderType)
+					.setAppType(appType)
+					.setCategoryId(categoryId)
+					.setViewType(viewType)
 					.setStartIndex(startIndex).setEntriesCount(10)
 					.setWithExtendedInfo(true)
 					.build();

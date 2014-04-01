@@ -1,9 +1,9 @@
-@ AndroidMarketAPI - Simple project to get Google Play Application category information 
+# AndroidMarketAPI - Simple project to get Google Play Application category information 
 
 AndroidMarketAPI is an Java project that uses [android-market-api project](https://code.google.com/p/android-market-api) to get Google Play Application category information. 
 If the API doesn't return correct data, you can get category information by HTML Parsing directly.
 
-[android-market-api project discussion groups in Google](https://groups.google.com/forum/#!forum/android-market-api)
+Reference : [android-market-api project discussion groups in Google](https://groups.google.com/forum/#!forum/android-market-api)
 
 ### Features:
 	* Application Package Name - Category(

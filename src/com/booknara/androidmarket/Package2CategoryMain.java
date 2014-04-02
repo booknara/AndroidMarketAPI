@@ -33,16 +33,15 @@ public class Package2CategoryMain {
 
 		String email = args[0];
 		String password = args[1];
+		String androidId = args[2];
 		
 		MarketSession session = new MarketSession();
-		String androidId = args[2]; 
-		
 		session.login(email,password);
 		session.getContext().setAndroidId(androidId);
 		
 		// Query for extracting category information from package name(Package Name - Category) 
 		final String packageName = "com.facebook.katana";
-		// final String packageName = "com.iloen.melon";				// Only Korea
+		// final String packageName = "com.iloen.melon";				// Only South Korea distributed App
 
 		String query = "pname:" + packageName;
 		AppsRequest appsRequest = AppsRequest.newBuilder()
@@ -70,9 +69,13 @@ public class Package2CategoryMain {
 	                    
 	                    Document doc = Jsoup.parse(getStringFromInputStream(input));
 	                    
-	                    // document-subtitle category
-	                    Element categoryElement = doc.select("a.category").first();
-	                    String category = categoryElement.select("span[itemprop=genre]").text();
+	                    /*
+	                     *  HTML Element 
+	                     *  <a class="document-subtitle category" href="/store/apps/category/[Category]"> 
+	                     *  	<span itemprop="genre">[Category]</span> 
+	                     *  </a>
+	                     */
+	                    String category = doc.select("a.category span[itemprop=genre]").text();
 	                    System.out.println("Package Name : " + packageName + " - " + "Category : " + category);
 
 					} catch (MalformedURLException e) {

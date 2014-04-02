@@ -1,27 +1,29 @@
-# AndroidMarketAPI 
+# AndroidMarketAPI
 
-AndroidMarketAPI is an Java project that uses [android-market-api project](https://code.google.com/p/android-market-api) to get Google Play Application category information. 
+AndroidMarketAPI is an Java project that uses [android-market-api project](https://code.google.com/p/android-market-api) to get Google Play Application category information.
 If the API doesn't return correct data, you can get category information by HTML Parsing directly.
 
 Reference : [android-market-api project discussion groups in Google](https://groups.google.com/forum/#!forum/android-market-api)
 
 ### Features:
-	* Application Package Name - Category(
+	* Application Package Name - Category
 	* Applications belong to a specific category ordered by popular, newest, featured
 
-## Prerequisite:
-
+### Prerequisite:
 	* Google ID/PW
 	* Android Device Id(TelephonyManager - getDeviceId())
 
-## Credits (Open Source Libaray)
+### Methodology:
+	* Using android-market-api project
+	* Parsing Google Play Web page
+
+### Credits (Open Source Libaray)
 	* [android-market-api](https://code.google.com/p/android-market-api)
 	* [Google protocol buffer](https://developers.google.com/protocol-buffers/)
 	* [Apache Common IO](http://commons.apache.org/proper/commons-io)
 	* [jsoup - Java HTML Parser](http://jsoup.org)
 
-## Licenses
-
+### Licenses
     Copyright (C) 2014 booknara
 
     Licensed under the Apache License, Version 2.0 (the "License");
